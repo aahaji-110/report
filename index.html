@@ -13,14 +13,25 @@
             --card-dark: #1e1e1e; 
             --text-main: #ecf0f1;
             --border: #333;
+            --accent: #2980b9;
         }
 
-        body {
-            font-family: 'Cairo', sans-serif;
+        html, body {
             background-color: var(--bg-dark);
+            margin: 0; padding: 0;
+            width: 100%;
+            font-family: 'Cairo', sans-serif;
             color: var(--text-main);
-            margin: 0; padding: 20px;
-            display: flex; flex-direction: column; align-items: center;
+        }
+
+        body { padding: 20px; display: flex; flex-direction: column; align-items: center; }
+
+        #top-search-bar {
+            width: 100%; max-width: 950px;
+            background: linear-gradient(145deg, #1e1e1e, #252525);
+            padding: 15px 25px; border-radius: 15px;
+            margin-bottom: 20px; border: 1px solid var(--accent);
+            display: flex; align-items: center; gap: 15px;
         }
 
         #input-form { 
@@ -29,35 +40,33 @@
             padding: 30px; border-radius: 20px; 
             border: 1px solid var(--border); 
             margin-bottom: 40px; 
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
         }
 
         .section-box { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 20px; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        label { display: block; color: var(--primary); font-weight: bold; margin-bottom: 8px; font-size: 0.9rem; }
-        input, textarea, select { width: 100%; padding: 12px; background: #252525; border: 1px solid var(--border); color: white; border-radius: 10px; box-sizing: border-box; outline: none; font-family: 'Cairo'; }
+        label { display: block; color: var(--primary); font-weight: bold; margin-bottom: 8px; font-size: 0.85rem; }
+        input, textarea, select { width: 100%; padding: 12px; background: #252525; border: 1px solid var(--border); color: white; border-radius: 10px; box-sizing: border-box; font-family: 'Cairo'; font-size: 0.9rem; }
         
         .row-input { display: grid; grid-template-columns: 1fr 1fr 1fr auto auto auto; gap: 8px; margin-top: 10px; align-items: center; background: #2a2a2a; padding: 10px; border-radius: 12px; }
-        .add-btn { background: var(--primary); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; margin-top: 10px; }
-        .control-btn { background: #333; color: white; border: none; width: 30px; height: 30px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; }
-        .control-btn:hover { background: var(--primary); }
-        .remove-btn { background: #dc3545 !important; }
+        .add-btn { background: var(--primary); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; }
+        .control-btn { background: #333; color: white; border: none; width: 30px; height: 30px; border-radius: 5px; cursor: pointer; }
 
-        .action-btns { display: flex; gap: 15px; margin-top: 20px; }
-        .update-btn { flex: 2; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
+        .action-btns { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; width: 100%; max-width: 950px;}
+        .update-btn { flex: 2; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
         .save-cloud-btn { flex: 1; padding: 18px; background: #e67e22; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        .reset-btn { flex: 1; padding: 18px; background: #c0392b; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
         .print-btn { flex: 1; padding: 18px; background: #2c3e50; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
 
-        #report-preview-container { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
-        
         #report-page { 
             width: 210mm; 
             min-height: 297mm; 
-            background: var(--bg-dark) !important; 
-            padding: 20mm; position: relative; box-sizing: border-box;
-            border: 1px solid var(--border);
+            background-color: #121212 !important; 
+            color: #ecf0f1 !important;
+            padding: 30mm 25mm; 
+            position: relative; 
+            box-sizing: border-box;
             display: none;
-            overflow: visible;
+            margin: 20px auto;
         }
 
         #report-page::before { 
@@ -69,79 +78,71 @@
         }
         
         header { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--primary); padding-bottom: 20px; margin-bottom: 30px; }
-        .report-body { position: relative; z-index: 1; line-height: 1.8; text-align: justify; font-size: 1.1rem; color: #eee; }
-        
-        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: transparent; }
-        table, th, td { border: 1px solid var(--primary); }
-        th { background: rgba(95, 128, 89, 0.2) !important; padding: 12px; color: var(--primary); font-weight: 900; }
-        td { padding: 10px; font-size: 0.95rem; text-align: center; color: #fff; }
+        header h2 { margin:0; font-size:1.3rem; color:white; }
 
-        .signers-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
-            margin-top: 50px;
-        }
+        .report-body { position: relative; z-index: 1; line-height: 1.8; text-align: justify; font-size: 0.95rem; margin-top: 20px; }
+        .report-body p { margin-bottom: 15px; }
+
+        table { width: 100%; border-collapse: collapse; margin: 15px 0; }
+        table, th, td { border: 1px solid var(--primary); }
+        th { background: rgba(95, 128, 89, 0.2) !important; padding: 12px; color: var(--primary) !important; font-size: 0.9rem; }
+        td { padding: 10px; text-align: center; color: #fff !important; font-size: 0.85rem; }
+
+        .report-link { color: #3498db !important; text-decoration: none; font-weight: bold; border-bottom: 1px solid #3498db; }
 
         @media print {
-            @page { margin: 0; size: A4; }
-            html, body { 
-                background-color: #121212 !important; 
-                color-adjust: exact !important; 
-                -webkit-print-color-adjust: exact !important;
-                margin: 0 !important; padding: 0 !important;
-            }
-            #input-form { display: none !important; }
-            #report-preview-container { margin: 0 !important; padding: 0 !important; display: block !important; background: #121212 !important; }
-            #report-page { 
-                display: block !important; 
-                border: none !important; 
-                margin: 0 !important; 
-                width: 100% !important; 
-                min-height: 100vh !important;
-                padding: 15mm !important;
-                background: #121212 !important;
-            }
-            .add-btn, .control-btn, .action-btns { display: none !important; }
+            @page { size: A4; margin: 0; }
+            html, body { background-color: #121212 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            body { padding: 0 !important; margin: 0 !important; }
+            #top-search-bar, #input-form, .action-btns, .add-btn, .control-btn { display: none !important; }
+            #report-page { display: block !important; width: 100% !important; min-height: 100vh !important; padding: 25mm !important; margin: 0 !important; border: none !important; background-color: #121212 !important; }
         }
     </style>
 </head>
 <body>
 
+<div id="top-search-bar">
+    <i class="fas fa-history" style="color: var(--accent); font-size: 1.3rem;"></i>
+    <label style="margin:0; white-space:nowrap; color: var(--accent);">استرجاع خطاب سابق:</label>
+    <select id="batchSelector" onchange="loadFromCloud(this.value)">
+        <option value="">-- اختر رقم الدفعة --</option>
+    </select>
+</div>
+
 <div id="input-form">
-    <h2 style="text-align: center; color: var(--primary); margin-top:0;"><i class="fas fa-file-invoice"></i> لوحة بيانات التقرير الموحدة</h2>
+    <h2 style="text-align: center; color: var(--primary); margin-top:0;"><i class="fas fa-file-invoice"></i> لوحة بيانات التقرير</h2>
     
     <div class="section-box">
         <label>موجه إلى (اللقب والاسم)</label>
-        <input type="text" id="targetPerson" class="save-local" placeholder="مثال: معالي وزير الصحة">
+        <input type="text" id="targetPerson" class="save-local" placeholder="مثال: معالي وزير الصحة" oninput="saveToLocal()">
     </div>
 
     <div class="grid section-box">
-        <div><label>رقم الدفعة</label><input type="text" id="batchId" class="save-local"></div>
-        <div><label>تاريخ فتح التقديم</label><input type="date" id="dOpen" class="save-local"></div>
-        <div><label>تاريخ إغلاق التقديم</label><input type="date" id="dClose" class="save-local"></div>
+        <div><label>رقم الدفعة</label><input type="text" id="batchId" class="save-local" oninput="saveToLocal()"></div>
+        <div><label>تاريخ فتح التقديم</label><input type="date" id="dOpen" class="save-local" onchange="saveToLocal()"></div>
+        <div><label>تاريخ إغلاق التقديم</label><input type="date" id="dClose" class="save-local" onchange="saveToLocal()"></div>
     </div>
 
-    <div class="grid section-box" style="background: rgba(95, 128, 89, 0.05); padding: 15px; border-radius: 10px;">
-        <div><label>تاريخ التدريب</label><input type="date" id="dTraining" class="save-local"></div>
-        <div><label>تاريخ الاختبار</label><input type="date" id="dExam" class="save-local"></div>
+    <div class="grid section-box">
+        <div><label>تاريخ التدريب</label><input type="date" id="dTraining" class="save-local" onchange="saveToLocal()"></div>
+        <div><label>تاريخ الاختبار</label><input type="date" id="dExam" class="save-local" onchange="saveToLocal()"></div>
     </div>
 
     <div class="section-box">
         <label>إحصائيات الفرز والقبول</label>
         <div class="grid">
-            <input type="number" id="nAll" class="save-local" placeholder="إجمالي المتقدمين">
-            <input type="number" id="nFilter" class="save-local" placeholder="العدد بعد الفرز">
-            <input type="number" id="nAccepted" class="save-local" placeholder="المقبولين نهائياً">
+            <input type="number" id="nAll" class="save-local" placeholder="إجمالي المتقدمين" oninput="saveToLocal()">
+            <input type="number" id="nFilter" class="save-local" placeholder="العدد بعد الفرز" oninput="saveToLocal()">
+            <input type="number" id="nAccepted" class="save-local" placeholder="المقبولين نهائياً" oninput="saveToLocal()">
         </div>
-        <textarea id="refuseReason" class="save-local" rows="2" style="margin-top:10px;" placeholder="أسباب الاستبعاد..."></textarea>
+        <textarea id="refuseReason" class="save-local" rows="2" style="margin-top:10px;" placeholder="أسباب الاستبعاد..." oninput="saveToLocal()"></textarea>
     </div>
 
     <div class="section-box">
         <label>إحصائيات التدريب</label>
         <div class="grid">
-            <div><label>1. الحضور</label><input type="number" id="nAttend" class="save-local" oninput="calcFinal()"></div>
-            <div><label>2. المغادرين</label><input type="number" id="nLeave" class="save-local" oninput="calcFinal()"></div>
+            <div><label>1. الحضور</label><input type="number" id="nAttend" class="save-local" oninput="calcFinal(); saveToLocal();"></div>
+            <div><label>2. المغادرين</label><input type="number" id="nLeave" class="save-local" oninput="calcFinal(); saveToLocal();"></div>
             <div><label>3. المكملين</label><input type="number" id="nFinal" readonly style="color:var(--primary); font-weight:bold;"></div>
         </div>
     </div>
@@ -166,7 +167,7 @@
 
     <div class="section-box">
         <label>التقييم العام وملاحظات الإدارة</label>
-        <textarea id="evalText" class="save-local" rows="3" placeholder="التقييم العام..."></textarea>
+        <textarea id="evalText" class="save-local" rows="3" placeholder="التقييم العام..." oninput="saveToLocal()"></textarea>
     </div>
 
     <div class="section-box">
@@ -174,12 +175,13 @@
         <div id="signersInputs"></div>
         <button class="add-btn" onclick="addInp('signersInputs')">+</button>
     </div>
+</div>
 
-    <div class="action-btns">
-        <button class="update-btn" onclick="updateReport()">تحديث ومعاينة الخطاب ↓</button>
-        <button class="save-cloud-btn" onclick="saveToCloud()"><i class="fas fa-cloud-upload-alt"></i> حفظ سحابي للرئاسة</button>
-        <button class="print-btn" onclick="window.print()"><i class="fas fa-print"></i> طباعة PDF</button>
-    </div>
+<div class="action-btns">
+    <button class="update-btn" onclick="updateReport()">تحديث ومعاينة الخطاب ↓</button>
+    <button class="save-cloud-btn" onclick="saveToCloud()"><i class="fas fa-cloud-upload-alt"></i> حفظ سحابي</button>
+    <button class="reset-btn" onclick="resetForm()"><i class="fas fa-eraser"></i> تفريغ الخانات</button>
+    <button class="print-btn" onclick="window.print()"><i class="fas fa-print"></i> طباعة PDF</button>
 </div>
 
 <div id="report-preview-container">
@@ -187,7 +189,7 @@
         <header>
             <img src="https://github.com/aahaji-110/report/blob/main/images/accadimy.png?raw=true" style="max-width:80px;">
             <div style="text-align:left">
-                <h2 style="margin:0; font-size:1.3rem; color:white;">تقرير تخريج دفعة</h2>
+                <h2>تقرير تخريج دفعة</h2>
                 <span style="color:var(--primary); font-weight:bold;">أكاديمية الصحة | EMS Academy</span>
             </div>
         </header>
@@ -196,6 +198,15 @@
 </div>
 
 <script>
+    const DB_URL = "https://ems-academy-gate-default-rtdb.firebaseio.com/reports";
+
+    function getDayName(dateString) {
+        if (!dateString) return "";
+        const days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+        const d = new Date(dateString);
+        return days[d.getDay()];
+    }
+
     function addInp(divId, data = null) {
         const container = document.getElementById(divId);
         const div = document.createElement('div');
@@ -203,13 +214,22 @@
         
         let fields = '';
         if(divId === 'trainInputs') {
-            fields = `<input type="text" placeholder="المدرب" class="t-name" value="${data?.[0] || ''}"><input type="text" placeholder="الفقرة" class="t-topic" value="${data?.[1] || ''}"><input type="text" placeholder="الرابط" class="t-link" value="${data?.[2] || ''}">`;
+            fields = `<input type="text" placeholder="المدرب" class="t-name" value="${data?.[0] || ''}" oninput="saveToLocal()"><input type="text" placeholder="الفقرة" class="t-topic" value="${data?.[1] || ''}" oninput="saveToLocal()"><input type="text" placeholder="الرابط" class="t-link" value="${data?.[2] || ''}" oninput="saveToLocal()">`;
         } else if(divId === 'starsInputs') {
-            fields = `<input type="text" placeholder="الاسم" class="s-name" value="${data?.[0] || ''}"><input type="number" placeholder="الدرجة" class="s-grade" value="${data?.[1] || ''}"><input type="text" placeholder="الميزة" class="s-note" value="${data?.[2] || ''}">`;
+            fields = `<input type="text" placeholder="الاسم" class="s-name" value="${data?.[0] || ''}" oninput="saveToLocal()"><input type="number" placeholder="الدرجة" class="s-grade" value="${data?.[1] || ''}" oninput="saveToLocal()"><input type="text" placeholder="الميزة" class="s-note" value="${data?.[2] || ''}" oninput="saveToLocal()">`;
         } else if(divId === 'trainersRatingList') {
-            fields = `<input type="text" placeholder="اسم المدرب" class="te-name" value="${data?.[0] || ''}"><select class="te-rate"><option value="">-- التقييم --</option><option value="ممتاز ⭐⭐⭐⭐⭐" ${data?.[1]?.includes('ممتاز')?'selected':''}>ممتاز ⭐⭐⭐⭐⭐</option><option value="جيد جداً ⭐⭐⭐⭐" ${data?.[1]?.includes('جيد جداً')?'selected':''}>جيد جداً ⭐⭐⭐⭐</option><option value="جيد ⭐⭐⭐" ${data?.[1]?.includes('جيد')?'selected':''}>جيد ⭐⭐⭐</option><option value="مقبول ⭐⭐" ${data?.[1]?.includes('مقبول')?'selected':''}>مقبول ⭐⭐</option><option value="ضعيف ⭐" ${data?.[1]?.includes('ضعيف')?'selected':''}>ضعيف ⭐</option></select><input type="text" placeholder="ملاحظة" class="te-note" value="${data?.[2] || ''}">`;
+            // التعديل هنا لضمان حفظ واسترجاع اختيار القائمة بشكل صحيح
+            const currentRate = data?.[1] || '';
+            fields = `<input type="text" placeholder="اسم المدرب" class="te-name" value="${data?.[0] || ''}" oninput="saveToLocal()">
+                      <select class="te-rate" onchange="saveToLocal()">
+                        <option value="">-- التقييم --</option>
+                        <option value="ممتاز ⭐⭐⭐⭐⭐" ${currentRate === 'ممتاز ⭐⭐⭐⭐⭐' ? 'selected' : ''}>ممتاز ⭐⭐⭐⭐⭐</option>
+                        <option value="جيد جداً ⭐⭐⭐⭐" ${currentRate === 'جيد جداً ⭐⭐⭐⭐' ? 'selected' : ''}>جيد جداً ⭐⭐⭐⭐</option>
+                        <option value="جيد ⭐⭐⭐" ${currentRate === 'جيد ⭐⭐⭐' ? 'selected' : ''}>جيد ⭐⭐⭐</option>
+                      </select>
+                      <input type="text" placeholder="ملاحظة" class="te-note" value="${data?.[2] || ''}" oninput="saveToLocal()">`;
         } else if(divId === 'signersInputs') {
-            fields = `<input type="text" placeholder="الاسم" class="sig-name" value="${data?.[0] || ''}"><input type="text" placeholder="المنصب" class="sig-role" value="${data?.[1] || ''}"><span></span>`;
+            fields = `<input type="text" placeholder="الاسم" class="sig-name" value="${data?.[0] || ''}" oninput="saveToLocal()"><input type="text" placeholder="المنصب" class="sig-role" value="${data?.[1] || ''}" oninput="saveToLocal()"><span></span>`;
         }
         
         div.innerHTML = fields + `<button class="control-btn" onclick="moveRow(this, 'up')">▲</button><button class="control-btn" onclick="moveRow(this, 'down')">▼</button><button class="control-btn remove-btn" onclick="this.parentElement.remove(); saveToLocal();">✕</button>`;
@@ -230,6 +250,18 @@
         document.getElementById('nFinal').value = Math.max(0, attend - leave);
     }
 
+    function resetForm() {
+        if(confirm("تفريغ كافة الخانات لبدء خطاب جديد؟")) {
+            document.querySelectorAll('input, textarea').forEach(el => el.value = "");
+            document.getElementById('trainInputs').innerHTML = "";
+            document.getElementById('starsInputs').innerHTML = "";
+            document.getElementById('trainersRatingList').innerHTML = "";
+            document.getElementById('signersInputs').innerHTML = "";
+            document.getElementById('report-page').style.display = 'none';
+            localStorage.removeItem('ems_report_draft');
+        }
+    }
+
     function saveToLocal() {
         const data = {};
         document.querySelectorAll('.save-local').forEach(el => data[el.id] = el.value);
@@ -240,36 +272,62 @@
         localStorage.setItem('ems_report_draft', JSON.stringify(data));
     }
 
-    function loadLocal() {
-        const saved = localStorage.getItem('ems_report_draft');
-        if (!saved) return;
-        const data = JSON.parse(saved);
-        Object.keys(data).forEach(key => { const el = document.getElementById(key); if (el) el.value = data[key]; });
-        if(data.trainRows) data.trainRows.forEach(r => addInp('trainInputs', r));
-        if(data.starRows) data.starRows.forEach(r => addInp('starsInputs', r));
-        if(data.rateRows) data.rateRows.forEach(r => addInp('trainersRatingList', r));
-        if(data.signerRows) data.signerRows.forEach(r => addInp('signersInputs', r));
-        calcFinal();
+    async function fetchAllBatches() {
+        try {
+            const res = await fetch(`${DB_URL}.json?shallow=true`);
+            const keys = await res.json();
+            const selector = document.getElementById('batchSelector');
+            selector.innerHTML = '<option value="">-- اختر رقم الدفعة --</option>';
+            if(keys) {
+                Object.keys(keys).sort((a,b)=>b-a).forEach(id => {
+                    const opt = document.createElement('option');
+                    opt.value = id;
+                    opt.textContent = `دفعة رقم: ${id}`;
+                    selector.appendChild(opt);
+                });
+            }
+        } catch(e) { console.error(e); }
+    }
+
+    async function loadFromCloud(batchId) {
+        if (!batchId) return;
+        try {
+            const res = await fetch(`${DB_URL}/${batchId}.json`);
+            const data = await res.json();
+            if (data) {
+                document.getElementById('trainInputs').innerHTML = '';
+                document.getElementById('starsInputs').innerHTML = '';
+                document.getElementById('trainersRatingList').innerHTML = '';
+                document.getElementById('signersInputs').innerHTML = '';
+                Object.keys(data).forEach(key => { const el = document.getElementById(key); if (el) el.value = data[key]; });
+                if(data.trainRows) data.trainRows.forEach(r => addInp('trainInputs', r));
+                if(data.starRows) data.starRows.forEach(r => addInp('starsInputs', r));
+                if(data.rateRows) data.rateRows.forEach(r => addInp('trainersRatingList', r));
+                if(data.signerRows) data.signerRows.forEach(r => addInp('signersInputs', r));
+                calcFinal();
+            }
+        } catch(e) { alert("خطأ في جلب البيانات!"); }
     }
 
     async function saveToCloud() {
+        const batchId = document.getElementById('batchId').value;
+        if(!batchId) return alert("أدخل رقم الدفعة أولاً!");
         saveToLocal();
         const data = JSON.parse(localStorage.getItem('ems_report_draft'));
-        const batchId = document.getElementById('batchId').value || 'unnamed';
         try {
-            await fetch(`https://ems-academy-gate-default-rtdb.firebaseio.com/reports/${batchId}.json`, { method: 'PUT', body: JSON.stringify({...data, lastUpdated: new Date()}) });
-            alert('تم الحفظ سحابياً بنجاح.');
-        } catch (e) { alert('خطأ في السحاب!'); }
+            await fetch(`${DB_URL}/${batchId}.json`, { method: 'PUT', body: JSON.stringify({...data, lastUpdated: new Date()}) });
+            alert('تم الحفظ سحابياً.');
+            fetchAllBatches();
+        } catch (e) { alert('خطأ في الحفظ!'); }
     }
 
     function updateReport() {
         const d = (id) => document.getElementById(id).value;
-        
         let html = `
             <p><b>${d('targetPerson') || "سعادة المسؤول"} المحترم</b></p>
             <p>السلام عليكم ورحمة الله وبركاته،، وبعد</p>
-            <p>نحيطكم علماً بنجاح أعمال <b>الدفعة رقم (${d('batchId')})</b>. بدأت مرحلة التقديم من <b>${d('dOpen')}</b> إلى <b>${d('dClose')}</b>، تقدم <b>(${d('nAll')})</b>، قُبل <b>(${d('nFilter')})</b> فرزاً، و <b>(${d('nAccepted')})</b> نهائياً.</p>
-            <p>وتم تحديد يوم التدريب بتاريخ <b>${d('dTraining')}</b> وتحديد موعد الاختبار بتاريخ <b>${d('dExam')}</b>. انتظم بالحضور <b>(${d('nAttend')})</b>، أتم منهم <b>(${d('nFinal')})</b> مكملاً، وغادر <b>(${d('nLeave')})</b> متدرباً.</p>
+            <p>نحيطكم علماً بنجاح أعمال <b>الدفعة رقم (${d('batchId')})</b>. تم فتح باب التقديم في يوم <b>${getDayName(d('dOpen'))}</b> الموافق <b>${d('dOpen')}</b>، واستمر حتى يوم <b>${getDayName(d('dClose'))}</b> الموافق <b>${d('dClose')}</b>. حيث تقدم <b>(${d('nAll')})</b>، قُبل منهم <b>(${d('nFilter')})</b> بعد الفرز، و <b>(${d('nAccepted')})</b> كقبول نهائي.</p>
+            <p>وتم تحديد يوم التدريب في يوم <b>${getDayName(d('dTraining'))}</b> الموافق <b>${d('dTraining')}</b> وتحديد موعد الاختبار في يوم <b>${getDayName(d('dExam'))}</b> الموافق <b>${d('dExam')}</b>. انتظم بالحضور <b>(${d('nAttend')})</b>، أتم منهم <b>(${d('nFinal')})</b> مكملاً، وغادر <b>(${d('nLeave')})</b> متدرباً.</p>
 
             <h3 style="color:var(--primary); border-right:4px solid var(--primary); padding-right:10px;">أولاً: أسباب الاستبعاد</h3>
             <p>${d('refuseReason') || "مطابقة المعايير."}</p>
@@ -283,7 +341,11 @@
             <h3 style="color:var(--primary); border-right:4px solid var(--primary); padding-right:10px;">ثالثاً: فقرات التدريب</h3>
             <table>
                 <tr><th>المدرب</th><th>الفقرة</th><th>الرابط</th></tr>
-                ${Array.from(document.querySelectorAll('#trainInputs .row-input')).map(r => `<tr><td>${r.querySelector('.t-name').value}</td><td>${r.querySelector('.t-topic').value}</td><td>${r.querySelector('.t-link').value}</td></tr>`).join('')}
+                ${Array.from(document.querySelectorAll('#trainInputs .row-input')).map(r => {
+                    const link = r.querySelector('.t-link').value;
+                    const linkHtml = link ? `<a href="${link}" target="_blank" class="report-link">لمشاهدة التقرير اضغط هنا</a>` : "---";
+                    return `<tr><td>${r.querySelector('.t-name').value}</td><td>${r.querySelector('.t-topic').value}</td><td>${linkHtml}</td></tr>`;
+                }).join('')}
             </table>
 
             <h3 style="color:var(--primary); border-right:4px solid var(--primary); padding-right:10px;">رابعاً: تقييم الكادر</h3>
@@ -293,21 +355,36 @@
             </table>
             <p>${d('evalText')}</p>
 
-            <div class="signers-grid">
-                ${Array.from(document.querySelectorAll('#signersInputs .row-input')).map(r => `
-                    <div style="text-align:center;">
-                        <p><b>${r.querySelector('.sig-name').value}</b><br>${r.querySelector('.sig-role').value}</p>
-                    </div>
-                `).join('')}
+            <div style="text-align: center; margin-top: 30px;">
+                <p><b>معد التقرير</b></p>
+                <div style="display: flex; justify-content: space-around; align-items: flex-start; gap: 20px; flex-wrap: nowrap;">
+                    ${Array.from(document.querySelectorAll('#signersInputs .row-input')).map(r => `
+                        <div style="flex: 1; text-align: center;">
+                            <p style="margin: 5px 0;"><b>${r.querySelector('.sig-name').value}</b></p>
+                            <p style="margin: 5px 0; font-size: 0.85rem;">${r.querySelector('.sig-role').value}</p>
+                        </div>
+                    `).join('')}
+                </div>
             </div>
         `;
-
         document.getElementById('finalPrint').innerHTML = html;
         document.getElementById('report-page').style.display = 'block';
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
 
-    window.onload = loadLocal;
+    window.onload = () => {
+        const saved = localStorage.getItem('ems_report_draft');
+        if (saved) {
+            const data = JSON.parse(saved);
+            Object.keys(data).forEach(key => { const el = document.getElementById(key); if (el) el.value = data[key]; });
+            if(data.trainRows) data.trainRows.forEach(r => addInp('trainInputs', r));
+            if(data.starRows) data.starRows.forEach(r => addInp('starsInputs', r));
+            if(data.rateRows) data.rateRows.forEach(r => addInp('trainersRatingList', r));
+            if(data.signerRows) data.signerRows.forEach(r => addInp('signersInputs', r));
+            calcFinal();
+        }
+        fetchAllBatches();
+    };
 </script>
 </body>
 </html>
