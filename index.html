@@ -348,7 +348,7 @@
                 }).join('')}
             </table>
 
-            <h3 style="color:var(--primary); border-right:4px solid var(--primary); padding-right:10px;">رابعاً: تقييم الكادر</h3>
+            <h3 style="color:var(--primary); border-right:4px solid var(--primary); padding-right:10px;">رابعاً: تقييم المدربين</h3>
             <table>
                 <tr><th>المدرب</th><th>التقييم</th><th>الملاحظة</th></tr>
                 ${Array.from(document.querySelectorAll('#trainersRatingList .row-input')).map(r => `<tr><td>${r.querySelector('.te-name').value}</td><td>${r.querySelector('.te-rate').value}</td><td>${r.querySelector('.te-note').value}</td></tr>`).join('')}
@@ -388,3 +388,4 @@
 </script>
 </body>
 </html>
+
