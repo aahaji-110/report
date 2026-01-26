@@ -26,6 +26,18 @@
 
         body { padding: 20px; display: flex; flex-direction: column; align-items: center; }
 
+        /* ستايل الإشعار التلقائي */
+        #toast {
+            position: fixed; bottom: 20px; right: 20px;
+            background: var(--primary); color: white;
+            padding: 12px 25px; border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: none; z-index: 1000; font-weight: bold;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+
         #top-search-bar {
             width: 100%; max-width: 950px;
             background: linear-gradient(145deg, #1e1e1e, #252525);
@@ -58,15 +70,9 @@
         .print-btn { flex: 1; padding: 18px; background: #2c3e50; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
 
         #report-page { 
-            width: 210mm; 
-            min-height: 297mm; 
-            background-color: #121212 !important; 
-            color: #ecf0f1 !important;
-            padding: 30mm 25mm; 
-            position: relative; 
-            box-sizing: border-box;
-            display: none;
-            margin: 20px auto;
+            width: 210mm; min-height: 297mm; background-color: #121212 !important; 
+            color: #ecf0f1 !important; padding: 30mm 25mm; position: relative; 
+            box-sizing: border-box; display: none; margin: 20px auto;
         }
 
         #report-page::before { 
@@ -94,12 +100,14 @@
             @page { size: A4; margin: 0; }
             html, body { background-color: #121212 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
             body { padding: 0 !important; margin: 0 !important; }
-            #top-search-bar, #input-form, .action-btns, .add-btn, .control-btn { display: none !important; }
+            #top-search-bar, #input-form, .action-btns, .add-btn, .control-btn, #toast { display: none !important; }
             #report-page { display: block !important; width: 100% !important; min-height: 100vh !important; padding: 25mm !important; margin: 0 !important; border: none !important; background-color: #121212 !important; }
         }
     </style>
 </head>
 <body>
+
+<div id="toast">تمت العملية بنجاح</div>
 
 <div id="top-search-bar">
     <i class="fas fa-history" style="color: var(--accent); font-size: 1.3rem;"></i>
@@ -200,6 +208,15 @@
 <script>
     const DB_URL = "https://ems-academy-gate-default-rtdb.firebaseio.com/reports";
 
+    // وظيفة إظهار الإشعار التلقائي
+    function showMsg(text, color = "var(--primary)") {
+        const t = document.getElementById('toast');
+        t.innerText = text;
+        t.style.background = color;
+        t.style.display = 'block';
+        setTimeout(() => { t.style.display = 'none'; }, 2500);
+    }
+
     function getDayName(dateString) {
         if (!dateString) return "";
         const days = ['الأحد', 'الاثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
@@ -250,15 +267,14 @@
     }
 
     function resetForm() {
-        if(confirm("تفريغ كافة الخانات لبدء خطاب جديد؟")) {
-            document.querySelectorAll('input, textarea').forEach(el => el.value = "");
-            document.getElementById('trainInputs').innerHTML = "";
-            document.getElementById('starsInputs').innerHTML = "";
-            document.getElementById('trainersRatingList').innerHTML = "";
-            document.getElementById('signersInputs').innerHTML = "";
-            document.getElementById('report-page').style.display = 'none';
-            localStorage.removeItem('ems_report_draft');
-        }
+        document.querySelectorAll('input, textarea').forEach(el => el.value = "");
+        document.getElementById('trainInputs').innerHTML = "";
+        document.getElementById('starsInputs').innerHTML = "";
+        document.getElementById('trainersRatingList').innerHTML = "";
+        document.getElementById('signersInputs').innerHTML = "";
+        document.getElementById('report-page').style.display = 'none';
+        localStorage.removeItem('ems_report_draft');
+        showMsg("تم مسح البيانات", "#c0392b");
     }
 
     function saveToLocal() {
@@ -304,20 +320,21 @@
                 if(data.rateRows) data.rateRows.forEach(r => addInp('trainersRatingList', r));
                 if(data.signerRows) data.signerRows.forEach(r => addInp('signersInputs', r));
                 calcFinal();
+                showMsg("تم استرجاع البيانات بنجاح");
             }
-        } catch(e) { alert("خطأ في جلب البيانات!"); }
+        } catch(e) { showMsg("خطأ في الاتصال!", "#c0392b"); }
     }
 
     async function saveToCloud() {
         const batchId = document.getElementById('batchId').value;
-        if(!batchId) return alert("أدخل رقم الدفعة أولاً!");
+        if(!batchId) return showMsg("يرجى كتابة رقم الدفعة!", "#e67e22");
         saveToLocal();
         const data = JSON.parse(localStorage.getItem('ems_report_draft'));
         try {
             await fetch(`${DB_URL}/${batchId}.json`, { method: 'PUT', body: JSON.stringify({...data, lastUpdated: new Date()}) });
-            alert('تم الحفظ سحابياً.');
+            showMsg("تم الحفظ سحابياً بنجاح ✅");
             fetchAllBatches();
-        } catch (e) { alert('خطأ في الحفظ!'); }
+        } catch (e) { showMsg("فشل الحفظ!", "#c0392b"); }
     }
 
     function updateReport() {
@@ -342,7 +359,6 @@
                 <tr><th>المدرب</th><th>الفقرة</th><th>الرابط</th></tr>
                 ${Array.from(document.querySelectorAll('#trainInputs .row-input')).map(r => {
                     const link = r.querySelector('.t-link').value;
-                    // التعديل هنا: يظهر الرابط نفسه بدلاً من الجملة الوصفية
                     const linkHtml = link ? `<a href="${link}" target="_blank" class="report-link" style="word-break: break-all; font-size: 0.85rem;">${link}</a>` : "---";
                     return `<tr><td>${r.querySelector('.t-name').value}</td><td>${r.querySelector('.t-topic').value}</td><td>${linkHtml}</td></tr>`;
                 }).join('')}
@@ -370,6 +386,7 @@
         document.getElementById('finalPrint').innerHTML = html;
         document.getElementById('report-page').style.display = 'block';
         window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        showMsg("تم تحديث المعاينة");
     }
 
     window.onload = () => {
@@ -388,6 +405,3 @@
 </script>
 </body>
 </html>
-
-
-
