@@ -49,7 +49,7 @@
         
         .row-input { display: grid; grid-template-columns: 1fr 1fr 1fr auto auto auto; gap: 8px; margin-top: 10px; align-items: center; background: #2a2a2a; padding: 10px; border-radius: 12px; }
         .add-btn { background: var(--primary); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; }
-        .control-btn { background: #333; color: white; border: none; width: 30px; height: 30px; border-radius: 5px; cursor: pointer; }
+        .control-btn { background: #333; color: white; border: none; width: 30px; height: 30px; border-radius: 50px; cursor: pointer; }
 
         .action-btns { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; width: 100%; max-width: 950px;}
         .update-btn { flex: 2; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
@@ -88,7 +88,7 @@
         th { background: rgba(95, 128, 89, 0.2) !important; padding: 12px; color: var(--primary) !important; font-size: 0.9rem; }
         td { padding: 10px; text-align: center; color: #fff !important; font-size: 0.85rem; }
 
-        .report-link { color: #3498db !important; text-decoration: none; font-weight: bold; border-bottom: 1px solid #3498db; }
+        .report-link { color: #3498db !important; text-decoration: none; font-weight: bold; }
 
         @media print {
             @page { size: A4; margin: 0; }
@@ -214,11 +214,10 @@
         
         let fields = '';
         if(divId === 'trainInputs') {
-            fields = `<input type="text" placeholder="المدرب" class="t-name" value="${data?.[0] || ''}" oninput="saveToLocal()"><input type="text" placeholder="الفقرة" class="t-topic" value="${data?.[1] || ''}" oninput="saveToLocal()"><input type="text" placeholder="الرابط" class="t-link" value="${data?.[2] || ''}" oninput="saveToLocal()">`;
+            fields = `<input type="text" placeholder="المدرب" class="t-name" value="${data?.[0] || ''}" oninput="saveToLocal()"><input type="text" placeholder="الفقرة" class="t-topic" value="${data?.[1] || ''}" oninput="saveToLocal()"><input type="text" placeholder="رابط اليوتيوب" class="t-link" value="${data?.[2] || ''}" oninput="saveToLocal()">`;
         } else if(divId === 'starsInputs') {
             fields = `<input type="text" placeholder="الاسم" class="s-name" value="${data?.[0] || ''}" oninput="saveToLocal()"><input type="number" placeholder="الدرجة" class="s-grade" value="${data?.[1] || ''}" oninput="saveToLocal()"><input type="text" placeholder="الميزة" class="s-note" value="${data?.[2] || ''}" oninput="saveToLocal()">`;
         } else if(divId === 'trainersRatingList') {
-            // التعديل هنا لضمان حفظ واسترجاع اختيار القائمة بشكل صحيح
             const currentRate = data?.[1] || '';
             fields = `<input type="text" placeholder="اسم المدرب" class="te-name" value="${data?.[0] || ''}" oninput="saveToLocal()">
                       <select class="te-rate" onchange="saveToLocal()">
@@ -343,7 +342,8 @@
                 <tr><th>المدرب</th><th>الفقرة</th><th>الرابط</th></tr>
                 ${Array.from(document.querySelectorAll('#trainInputs .row-input')).map(r => {
                     const link = r.querySelector('.t-link').value;
-                    const linkHtml = link ? `<a href="${link}" target="_blank" class="report-link">لمشاهدة التقرير اضغط هنا</a>` : "---";
+                    // التعديل هنا: يظهر الرابط نفسه بدلاً من الجملة الوصفية
+                    const linkHtml = link ? `<a href="${link}" target="_blank" class="report-link" style="word-break: break-all; font-size: 0.85rem;">${link}</a>` : "---";
                     return `<tr><td>${r.querySelector('.t-name').value}</td><td>${r.querySelector('.t-topic').value}</td><td>${linkHtml}</td></tr>`;
                 }).join('')}
             </table>
