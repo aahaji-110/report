@@ -3,296 +3,311 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تقرير تخريج دفعة | أكاديمية الصحة</title>
+    <title>نظام التقارير الذكي | أكاديمية الصحة</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #5f8059; 
-            --bg-body: #121212; 
-            --bg-card: #1e1e1e; 
+            --bg-dark: #121212; 
+            --card-dark: #1e1e1e; 
             --text-main: #ecf0f1;
             --border: #333;
-            --input-bg: #252525;
-            --shadow: 0 8px 30px rgba(0,0,0,0.4);
         }
 
         body {
             font-family: 'Cairo', sans-serif;
-            background-color: var(--bg-body);
+            background-color: var(--bg-dark);
             color: var(--text-main);
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            justify-content: center;
+            margin: 0; padding: 20px;
+            display: flex; flex-direction: column; align-items: center;
         }
 
-        .container {
-            background: var(--bg-card);
-            padding: 30px;
-            border-radius: 25px;
-            box-shadow: var(--shadow);
-            width: 100%;
-            max-width: 900px;
+        #input-form { 
+            width: 100%; max-width: 950px; 
+            background: var(--card-dark); 
+            padding: 30px; border-radius: 20px; 
+            border: 1px solid var(--border); 
+            margin-bottom: 40px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5); 
+        }
+
+        .section-box { border-bottom: 1px solid var(--border); padding-bottom: 20px; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        label { display: block; color: var(--primary); font-weight: bold; margin-bottom: 8px; font-size: 0.9rem; }
+        input, textarea, select { width: 100%; padding: 12px; background: #252525; border: 1px solid var(--border); color: white; border-radius: 10px; box-sizing: border-box; outline: none; font-family: 'Cairo'; }
+        
+        .row-input { display: grid; grid-template-columns: 1fr 1fr 1fr auto auto auto; gap: 8px; margin-top: 10px; align-items: center; background: #2a2a2a; padding: 10px; border-radius: 12px; }
+        .add-btn { background: var(--primary); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; margin-top: 10px; }
+        .control-btn { background: #333; color: white; border: none; width: 30px; height: 30px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; }
+        .control-btn:hover { background: var(--primary); }
+        .remove-btn { background: #dc3545 !important; }
+
+        .action-btns { display: flex; gap: 15px; margin-top: 20px; }
+        .update-btn { flex: 2; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 1.1rem; cursor: pointer; transition: 0.3s; }
+        .save-cloud-btn { flex: 1; padding: 18px; background: #e67e22; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        .print-btn { flex: 1; padding: 18px; background: #2c3e50; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
+
+        #report-preview-container { width: 100%; display: flex; flex-direction: column; align-items: center; margin-top: 20px; }
+        
+        #report-page { 
+            width: 210mm; 
+            min-height: 297mm; 
+            background: var(--bg-dark) !important; 
+            padding: 20mm; position: relative; box-sizing: border-box;
             border: 1px solid var(--border);
+            display: none;
+            overflow: visible;
         }
 
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--primary);
-            padding-bottom: 15px;
-            margin-bottom: 30px;
+        #report-page::before { 
+            content: ""; position: absolute; top: 150mm; left: 50%; 
+            transform: translate(-50%, -50%); width: 600px; height: 600px; 
+            background-image: url('https://github.com/aahaji-110/report/blob/main/images/accadimy.png?raw=true'); 
+            background-repeat: no-repeat; background-position: center; background-size: contain; 
+            opacity: 0.08; z-index: 0;
         }
+        
+        header { position: relative; z-index: 1; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--primary); padding-bottom: 20px; margin-bottom: 30px; }
+        .report-body { position: relative; z-index: 1; line-height: 1.8; text-align: justify; font-size: 1.1rem; color: #eee; }
+        
+        table { width: 100%; border-collapse: collapse; margin: 20px 0; background: transparent; }
+        table, th, td { border: 1px solid var(--primary); }
+        th { background: rgba(95, 128, 89, 0.2) !important; padding: 12px; color: var(--primary); font-weight: 900; }
+        td { padding: 10px; font-size: 0.95rem; text-align: center; color: #fff; }
 
-        .logo-img { max-width: 80px; height: auto; }
-
-        h2, h3 { color: var(--primary); margin-bottom: 20px; border-right: 4px solid var(--primary); padding-right: 10px; }
-
-        .grid-row {
+        .signers-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
+            gap: 30px;
+            margin-top: 50px;
         }
-
-        .input-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 8px; font-size: 0.9rem; color: var(--primary); font-weight: bold; }
-
-        input, textarea, select {
-            width: 100%;
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: var(--input-bg);
-            color: white;
-            font-family: 'Cairo';
-            box-sizing: border-box;
-            outline: none;
-        }
-
-        input:focus { border-color: var(--primary) !important; }
-
-        .dynamic-list {
-            background: rgba(255,255,255,0.02);
-            padding: 15px;
-            border-radius: 15px;
-            border: 1px dashed var(--border);
-            margin-bottom: 20px;
-        }
-
-        .row-item {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr auto;
-            gap: 10px;
-            margin-bottom: 10px;
-            align-items: center;
-        }
-
-        .add-btn { background: var(--primary); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer; font-size: 1.2rem; }
-        .remove-btn { background: #dc3545; color: white; border: none; border-radius: 8px; padding: 5px 10px; cursor: pointer; }
-        .submit-btn { width: 100%; padding: 15px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: bold; font-size: 1.1rem; cursor: pointer; margin-top: 20px; }
-
-        .footer-sign {
-            margin-top: 40px;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 50px;
-            border-top: 1px solid var(--border);
-            padding-top: 20px;
-        }
-
-        .rating-select { color: #f1c40f !important; font-weight: bold; }
 
         @media print {
-            body { background: white !important; color: black !important; padding: 0; }
-            .container { box-shadow: none; border: none; width: 100%; max-width: 100%; padding: 0; }
-            .add-btn, .remove-btn, .submit-btn { display: none !important; }
-            input, textarea, select { background: white !important; color: black !important; border: 1px solid #ccc !important; }
-            .page-break { page-break-before: always; }
-            h3, .grid-row, .input-group, .dynamic-list { page-break-inside: avoid; }
+            @page { margin: 0; size: A4; }
+            html, body { 
+                background-color: #121212 !important; 
+                color-adjust: exact !important; 
+                -webkit-print-color-adjust: exact !important;
+                margin: 0 !important; padding: 0 !important;
+            }
+            #input-form { display: none !important; }
+            #report-preview-container { margin: 0 !important; padding: 0 !important; display: block !important; background: #121212 !important; }
+            #report-page { 
+                display: block !important; 
+                border: none !important; 
+                margin: 0 !important; 
+                width: 100% !important; 
+                min-height: 100vh !important;
+                padding: 15mm !important;
+                background: #121212 !important;
+            }
+            .add-btn, .control-btn, .action-btns { display: none !important; }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <img src="https://github.com/aahaji-110/report/blob/main/images/accadimy.png?raw=true" class="logo-img">
-        <div style="text-align:left">
-            <h2 style="margin:0; font-size:1.2rem; border:none;">تقرير تخريج دفعة</h2>
-            <span style="color:var(--primary); font-weight: bold;">EMS Academy</span>
-        </div>
-    </header>
+<div id="input-form">
+    <h2 style="text-align: center; color: var(--primary); margin-top:0;"><i class="fas fa-file-invoice"></i> لوحة بيانات التقرير الموحدة</h2>
+    
+    <div class="section-box">
+        <label>موجه إلى (اللقب والاسم)</label>
+        <input type="text" id="targetPerson" class="save-local" placeholder="مثال: معالي وزير الصحة">
+    </div>
 
-    <div class="grid-row">
-        <div class="input-group">
-            <label>تاريخ فتح التقديم</label>
-            <input type="date">
+    <div class="grid section-box">
+        <div><label>رقم الدفعة</label><input type="text" id="batchId" class="save-local"></div>
+        <div><label>تاريخ فتح التقديم</label><input type="date" id="dOpen" class="save-local"></div>
+        <div><label>تاريخ إغلاق التقديم</label><input type="date" id="dClose" class="save-local"></div>
+    </div>
+
+    <div class="grid section-box" style="background: rgba(95, 128, 89, 0.05); padding: 15px; border-radius: 10px;">
+        <div><label>تاريخ التدريب</label><input type="date" id="dTraining" class="save-local"></div>
+        <div><label>تاريخ الاختبار</label><input type="date" id="dExam" class="save-local"></div>
+    </div>
+
+    <div class="section-box">
+        <label>إحصائيات الفرز والقبول</label>
+        <div class="grid">
+            <input type="number" id="nAll" class="save-local" placeholder="إجمالي المتقدمين">
+            <input type="number" id="nFilter" class="save-local" placeholder="العدد بعد الفرز">
+            <input type="number" id="nAccepted" class="save-local" placeholder="المقبولين نهائياً">
         </div>
-        <div class="input-group">
-            <label>تاريخ إغلاق التقديم</label>
-            <input type="date">
+        <textarea id="refuseReason" class="save-local" rows="2" style="margin-top:10px;" placeholder="أسباب الاستبعاد..."></textarea>
+    </div>
+
+    <div class="section-box">
+        <label>إحصائيات التدريب</label>
+        <div class="grid">
+            <div><label>1. الحضور</label><input type="number" id="nAttend" class="save-local" oninput="calcFinal()"></div>
+            <div><label>2. المغادرين</label><input type="number" id="nLeave" class="save-local" oninput="calcFinal()"></div>
+            <div><label>3. المكملين</label><input type="number" id="nFinal" readonly style="color:var(--primary); font-weight:bold;"></div>
         </div>
     </div>
 
-    <section>
-        <h3><i class="fas fa-users"></i> إحصائيات الفرز</h3>
-        <div class="grid-row">
-            <div class="input-group">
-                <label>عدد المتقدمين</label>
-                <input type="number" placeholder="أدخل العدد">
-            </div>
-            <div class="input-group">
-                <label>عدد الأشخاص بعد الفرز</label>
-                <input type="number" placeholder="أدخل العدد">
-            </div>
-            <div class="input-group">
-                <label>عدد المقبولين</label>
-                <input type="number" placeholder="أدخل العدد">
-            </div>
-        </div>
-        <div class="input-group">
-            <label>أسباب رفض غير المقبولين</label>
-            <textarea rows="2" placeholder="اذكر الأسباب هنا..."></textarea>
-        </div>
-    </section>
-
-    <section>
-        <h3><i class="fas fa-sign-out-alt"></i> إحصائيات التدريب</h3>
-        <div class="grid-row">
-            <div class="input-group">
-                <label>عدد حضور التدريب (مستجدين)</label>
-                <input type="number" placeholder="0">
-            </div>
-            <div class="input-group">
-                <label>عدد المغادرين أثناء التدريب</label>
-                <input type="number" id="leavingCount" placeholder="0" readonly style="background: rgba(255,255,255,0.05);">
-            </div>
-        </div>
-
-        <div class="dynamic-list" id="leavingList">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <label style="margin:0;">اسباب المغادرة</label>
-                <button class="add-btn" onclick="addLeavingRow()">+</button>
-            </div>
-        </div>
-    </section>
-
-    <div class="page-break"></div> <section>
-        <h3><i class="fas fa-chalkboard-teacher"></i> فقرات التدريب</h3>
-        <div class="grid-row">
-            <div class="input-group">
-                <label>اسم المدرب </label>
-                <input type="text" placeholder="اسم المدرب المسؤول">
-            </div>
-            <div class="input-group">
-                <label>الفقرة الخاصة بالتدريب</label>
-                <input type="text" placeholder="عنوان الفقرة">
-            </div>
-        </div>
-        <div class="input-group">
-            <label>رابط مقطع الفقرة</label>
-            <input type="url" placeholder="ضع رابط الفيديو هنا">
-        </div>
-    </section>
-
-    <section>
-        <h3><i class="fas fa-edit"></i> التقييم العام للدفعة</h3>
-        <div class="input-group">
-            <label>ملاحظات على الدفعة </label>
-            <textarea rows="4" placeholder="اكتب تقريرك المفصل عن أداء الدفعة..."></textarea>
-        </div>
-
-        <div class="dynamic-list" id="starsList">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <label style="margin:0;">الأشخاص المميزين من المستجدين</label>
-                <button class="add-btn" onclick="addStarRow()">+</button>
-            </div>
-        </div>
-    </section>
-
-    <div class="page-break"></div> <section>
-        <h3><i class="fas fa-star"></i> تقييم المدربين المشاركين</h3>
-        <div class="dynamic-list" id="trainersRatingList">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <label style="margin:0;">قائمة تقييم المدربين</label>
-                <button class="add-btn" onclick="addTrainerRatingRow()">+</button>
-            </div>
-        </div>
-    </section>
-
-    <div class="footer-sign">
-        <div class="input-group">
-            <label>اسم مسؤول الدفعة</label>
-            <input type="text" placeholder="الاسم الثلاثي">
-        </div>
-        <div class="input-group">
-            <label>رتبة المسؤول</label>
-            <input type="text" placeholder="الرتبة">
-        </div>
+    <div class="section-box">
+        <label>فقرات التدريب والمدربين</label>
+        <div id="trainInputs"></div>
+        <button class="add-btn" onclick="addInp('trainInputs')">+</button>
     </div>
 
-    <button class="submit-btn" onclick="window.print()">اعتماد وطباعة التقرير</button>
+    <div class="section-box">
+        <label>المتميزون في الدفعة</label>
+        <div id="starsInputs"></div>
+        <button class="add-btn" onclick="addInp('starsInputs')">+</button>
+    </div>
+
+    <div class="section-box">
+        <label>تقييم كفاءة المدربين</label>
+        <div id="trainersRatingList"></div>
+        <button class="add-btn" onclick="addInp('trainersRatingList')">+</button>
+    </div>
+
+    <div class="section-box">
+        <label>التقييم العام وملاحظات الإدارة</label>
+        <textarea id="evalText" class="save-local" rows="3" placeholder="التقييم العام..."></textarea>
+    </div>
+
+    <div class="section-box">
+        <label>المسؤولون الموقعون</label>
+        <div id="signersInputs"></div>
+        <button class="add-btn" onclick="addInp('signersInputs')">+</button>
+    </div>
+
+    <div class="action-btns">
+        <button class="update-btn" onclick="updateReport()">تحديث ومعاينة الخطاب ↓</button>
+        <button class="save-cloud-btn" onclick="saveToCloud()"><i class="fas fa-cloud-upload-alt"></i> حفظ سحابي للرئاسة</button>
+        <button class="print-btn" onclick="window.print()"><i class="fas fa-print"></i> طباعة PDF</button>
+    </div>
+</div>
+
+<div id="report-preview-container">
+    <div id="report-page">
+        <header>
+            <img src="https://github.com/aahaji-110/report/blob/main/images/accadimy.png?raw=true" style="max-width:80px;">
+            <div style="text-align:left">
+                <h2 style="margin:0; font-size:1.3rem; color:white;">تقرير تخريج دفعة</h2>
+                <span style="color:var(--primary); font-weight:bold;">أكاديمية الصحة | EMS Academy</span>
+            </div>
+        </header>
+        <div class="report-body" id="finalPrint"></div>
+    </div>
 </div>
 
 <script>
-    function addLeavingRow() {
-        const container = document.getElementById('leavingList');
+    function addInp(divId, data = null) {
+        const container = document.getElementById(divId);
         const div = document.createElement('div');
-        div.className = 'row-item';
-        div.innerHTML = `
-            <input type="text" placeholder="اسم الشخص">
-            <input type="text" placeholder="سبب المغادرة" style="grid-column: span 2;">
-            <button class="remove-btn" onclick="this.parentElement.remove(); updateCounts();">حذف</button>
-        `;
+        div.className = 'row-input';
+        
+        let fields = '';
+        if(divId === 'trainInputs') {
+            fields = `<input type="text" placeholder="المدرب" class="t-name" value="${data?.[0] || ''}"><input type="text" placeholder="الفقرة" class="t-topic" value="${data?.[1] || ''}"><input type="text" placeholder="الرابط" class="t-link" value="${data?.[2] || ''}">`;
+        } else if(divId === 'starsInputs') {
+            fields = `<input type="text" placeholder="الاسم" class="s-name" value="${data?.[0] || ''}"><input type="number" placeholder="الدرجة" class="s-grade" value="${data?.[1] || ''}"><input type="text" placeholder="الميزة" class="s-note" value="${data?.[2] || ''}">`;
+        } else if(divId === 'trainersRatingList') {
+            fields = `<input type="text" placeholder="اسم المدرب" class="te-name" value="${data?.[0] || ''}"><select class="te-rate"><option value="">-- التقييم --</option><option value="ممتاز ⭐⭐⭐⭐⭐" ${data?.[1]?.includes('ممتاز')?'selected':''}>ممتاز ⭐⭐⭐⭐⭐</option><option value="جيد جداً ⭐⭐⭐⭐" ${data?.[1]?.includes('جيد جداً')?'selected':''}>جيد جداً ⭐⭐⭐⭐</option><option value="جيد ⭐⭐⭐" ${data?.[1]?.includes('جيد')?'selected':''}>جيد ⭐⭐⭐</option><option value="مقبول ⭐⭐" ${data?.[1]?.includes('مقبول')?'selected':''}>مقبول ⭐⭐</option><option value="ضعيف ⭐" ${data?.[1]?.includes('ضعيف')?'selected':''}>ضعيف ⭐</option></select><input type="text" placeholder="ملاحظة" class="te-note" value="${data?.[2] || ''}">`;
+        } else if(divId === 'signersInputs') {
+            fields = `<input type="text" placeholder="الاسم" class="sig-name" value="${data?.[0] || ''}"><input type="text" placeholder="المنصب" class="sig-role" value="${data?.[1] || ''}"><span></span>`;
+        }
+        
+        div.innerHTML = fields + `<button class="control-btn" onclick="moveRow(this, 'up')">▲</button><button class="control-btn" onclick="moveRow(this, 'down')">▼</button><button class="control-btn remove-btn" onclick="this.parentElement.remove(); saveToLocal();">✕</button>`;
         container.appendChild(div);
-        updateCounts();
+        saveToLocal();
     }
 
-    function addTrainerRatingRow() {
-        const container = document.getElementById('trainersRatingList');
-        const div = document.createElement('div');
-        div.className = 'row-item';
-        div.innerHTML = `
-            <input type="text" placeholder="اسم المدرب">
-            <select class="rating-select">
-                <option value="">-- التقييم --</option>
-                <option value="ممتاز">ممتاز ⭐⭐⭐⭐⭐</option>
-                <option value="جيد جداً">جيد جداً ⭐⭐⭐⭐</option>
-                <option value="جيد">جيد ⭐⭐⭐</option>
-                <option value="مقبول">مقبول ⭐⭐</option>
-                <option value="ضعيف">ضعيف ⭐</option>
-            </select>
-            <input type="text" placeholder="ملاحظات على المدرب">
-            <button class="remove-btn" onclick="this.parentElement.remove()">حذف</button>
-        `;
-        container.appendChild(div);
+    function moveRow(btn, dir) {
+        const row = btn.parentElement;
+        if (dir === 'up' && row.previousElementSibling) row.parentNode.insertBefore(row, row.previousElementSibling);
+        else if (dir === 'down' && row.nextElementSibling) row.parentNode.insertBefore(row.nextElementSibling, row);
+        saveToLocal();
     }
 
-    function addStarRow() {
-        const container = document.getElementById('starsList');
-        const div = document.createElement('div');
-        div.className = 'row-item';
-        div.innerHTML = `
-            <input type="text" placeholder="اسم الشخص">
-            <input type="text" placeholder="سبب التميز" style="grid-column: span 2;">
-            <button class="remove-btn" onclick="this.parentElement.remove()">حذف</button>
-        `;
-        container.appendChild(div);
+    function calcFinal() {
+        const attend = parseFloat(document.getElementById('nAttend').value) || 0;
+        const leave = parseFloat(document.getElementById('nLeave').value) || 0;
+        document.getElementById('nFinal').value = Math.max(0, attend - leave);
     }
 
-    function updateCounts() {
-        const rows = document.querySelectorAll('#leavingList .row-item').length;
-        document.getElementById('leavingCount').value = rows;
+    function saveToLocal() {
+        const data = {};
+        document.querySelectorAll('.save-local').forEach(el => data[el.id] = el.value);
+        data.trainRows = Array.from(document.querySelectorAll('#trainInputs .row-input')).map(r => [r.querySelector('.t-name').value, r.querySelector('.t-topic').value, r.querySelector('.t-link').value]);
+        data.starRows = Array.from(document.querySelectorAll('#starsInputs .row-input')).map(r => [r.querySelector('.s-name').value, r.querySelector('.s-grade').value, r.querySelector('.s-note').value]);
+        data.rateRows = Array.from(document.querySelectorAll('#trainersRatingList .row-input')).map(r => [r.querySelector('.te-name').value, r.querySelector('.te-rate').value, r.querySelector('.te-note').value]);
+        data.signerRows = Array.from(document.querySelectorAll('#signersInputs .row-input')).map(r => [r.querySelector('.sig-name').value, r.querySelector('.sig-role').value]);
+        localStorage.setItem('ems_report_draft', JSON.stringify(data));
     }
+
+    function loadLocal() {
+        const saved = localStorage.getItem('ems_report_draft');
+        if (!saved) return;
+        const data = JSON.parse(saved);
+        Object.keys(data).forEach(key => { const el = document.getElementById(key); if (el) el.value = data[key]; });
+        if(data.trainRows) data.trainRows.forEach(r => addInp('trainInputs', r));
+        if(data.starRows) data.starRows.forEach(r => addInp('starsInputs', r));
+        if(data.rateRows) data.rateRows.forEach(r => addInp('trainersRatingList', r));
+        if(data.signerRows) data.signerRows.forEach(r => addInp('signersInputs', r));
+        calcFinal();
+    }
+
+    async function saveToCloud() {
+        saveToLocal();
+        const data = JSON.parse(localStorage.getItem('ems_report_draft'));
+        const batchId = document.getElementById('batchId').value || 'unnamed';
+        try {
+            await fetch(`https://ems-academy-gate-default-rtdb.firebaseio.com/reports/${batchId}.json`, { method: 'PUT', body: JSON.stringify({...data, lastUpdated: new Date()}) });
+            alert('تم الحفظ سحابياً بنجاح.');
+        } catch (e) { alert('خطأ في السحاب!'); }
+    }
+
+    function updateReport() {
+        const d = (id) => document.getElementById(id).value;
+        
+        let html = `
+            <p><b>${d('targetPerson') || "سعادة المسؤول"} المحترم</b></p>
+            <p>السلام عليكم ورحمة الله وبركاته،، وبعد</p>
+            <p>نحيطكم علماً بنجاح أعمال <b>الدفعة رقم (${d('batchId')})</b>. بدأت مرحلة التقديم من <b>${d('dOpen')}</b> إلى <b>${d('dClose')}</b>، تقدم <b>(${d('nAll')})</b>، قُبل <b>(${d('nFilter')})</b> فرزاً، و <b>(${d('nAccepted')})</b> نهائياً.</p>
+            <p>وتم تحديد يوم التدريب بتاريخ <b>${d('dTraining')}</b> وتحديد موعد الاختبار بتاريخ <b>${d('dExam')}</b>. انتظم بالحضور <b>(${d('nAttend')})</b>، أتم منهم <b>(${d('nFinal')})</b> مكملاً، وغادر <b>(${d('nLeave')})</b> متدرباً.</p>
+
+            <h3 style="color:var(--primary); border-right:4px solid var(--primary); padding-right:10px;">أولاً: أسباب الاستبعاد</h3>
+            <p>${d('refuseReason') || "مطابقة المعايير."}</p>
+
+            <h3 style="color:var(--primary); border-right:4px solid var(--primary); padding-right:10px;">ثانياً: المتميزون</h3>
+            <table>
+                <tr><th>الاسم</th><th>الدرجة</th><th>الملاحظة</th></tr>
+                ${Array.from(document.querySelectorAll('#starsInputs .row-input')).map(r => `<tr><td>${r.querySelector('.s-name').value}</td><td>${r.querySelector('.s-grade').value}</td><td>${r.querySelector('.s-note').value}</td></tr>`).join('')}
+            </table>
+
+            <h3 style="color:var(--primary); border-right:4px solid var(--primary); padding-right:10px;">ثالثاً: فقرات التدريب</h3>
+            <table>
+                <tr><th>المدرب</th><th>الفقرة</th><th>الرابط</th></tr>
+                ${Array.from(document.querySelectorAll('#trainInputs .row-input')).map(r => `<tr><td>${r.querySelector('.t-name').value}</td><td>${r.querySelector('.t-topic').value}</td><td>${r.querySelector('.t-link').value}</td></tr>`).join('')}
+            </table>
+
+            <h3 style="color:var(--primary); border-right:4px solid var(--primary); padding-right:10px;">رابعاً: تقييم الكادر</h3>
+            <table>
+                <tr><th>المدرب</th><th>التقييم</th><th>الملاحظة</th></tr>
+                ${Array.from(document.querySelectorAll('#trainersRatingList .row-input')).map(r => `<tr><td>${r.querySelector('.te-name').value}</td><td>${r.querySelector('.te-rate').value}</td><td>${r.querySelector('.te-note').value}</td></tr>`).join('')}
+            </table>
+            <p>${d('evalText')}</p>
+
+            <div class="signers-grid">
+                ${Array.from(document.querySelectorAll('#signersInputs .row-input')).map(r => `
+                    <div style="text-align:center;">
+                        <p><b>${r.querySelector('.sig-name').value}</b><br>${r.querySelector('.sig-role').value}</p>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+
+        document.getElementById('finalPrint').innerHTML = html;
+        document.getElementById('report-page').style.display = 'block';
+        window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+
+    window.onload = loadLocal;
 </script>
-
 </body>
-
 </html>
-
-
-
-
