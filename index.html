@@ -340,7 +340,7 @@
     function updateReport() {
         const d = (id) => document.getElementById(id).value;
         let html = `
-            <p><b>${d('targetPerson') || "سعادة المسؤول"} المحترم</b></p>
+            <p><b>${d('targetPerson') || "سعادة المسؤول"} المحترمة</b></p>
             <p>السلام عليكم ورحمة الله وبركاته،، وبعد</p>
             <p>نحيطكم علماً بنجاح أعمال <b>الدفعة رقم (${d('batchId')})</b>. تم فتح باب التقديم في يوم <b>${getDayName(d('dOpen'))}</b> الموافق <b>${d('dOpen')}</b>، واستمر حتى يوم <b>${getDayName(d('dClose'))}</b> الموافق <b>${d('dClose')}</b>. حيث تقدم <b>(${d('nAll')})</b>، قُبل منهم <b>(${d('nFilter')})</b> بعد الفرز، و <b>(${d('nAccepted')})</b> كقبول نهائي.</p>
             <p>وتم تحديد يوم التدريب في يوم <b>${getDayName(d('dTraining'))}</b> الموافق <b>${d('dTraining')}</b> وتحديد موعد الاختبار في يوم <b>${getDayName(d('dExam'))}</b> الموافق <b>${d('dExam')}</b>. انتظم بالحضور <b>(${d('nAttend')})</b>، أتم منهم <b>(${d('nFinal')})</b> مكملاً، وغادر <b>(${d('nLeave')})</b> متدرباً.</p>
@@ -405,3 +405,4 @@
 </script>
 </body>
 </html>
+
